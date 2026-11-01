@@ -1,27 +1,31 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fleet_watch/features/auth/auth_provider.dart';
-import 'package:fleet_watch/features/auth/login_screen.dart';
-import 'package:fleet_watch/features/auth/register_screen.dart';
-import 'package:fleet_watch/features/home/home_screen.dart';
+import 'features/auth/auth_state.dart';
+import 'features/auth/login_screen.dart';
+import 'features/auth/role_screen.dart';
+import 'features/home/home_shell.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authProvider);
+  final refresh = ValueNotifier<int>(0);
+  ref.listen(sessionProvider, (_, __) => refresh.value++);
+  ref.onDispose(refresh.dispose);
 
   return GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/home',
+    refreshListenable: refresh,
     redirect: (context, state) {
-      final isLoggedIn = authState.isLoggedIn;
-      final isLoginOrRegister = state.uri.path == '/login' || state.uri.path == '/register';
-
-      if (!isLoggedIn && !isLoginOrRegister) return '/login';
-      if (isLoggedIn && isLoginOrRegister) return '/';
+      final s = ref.read(sessionProvider);
+      final loc = state.matchedLocation;
+      if (!s.loggedIn) return loc == '/login' ? null : '/login';
+      if (s.role == null) return loc == '/role' ? null : '/role';
+      if (loc == '/login' || loc == '/role') return '/home';
       return null;
     },
     routes: [
-      GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
-      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
-      GoRoute(path: '/register', builder: (context, state) => const RegisterScreen()),
+      GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
+      GoRoute(path: '/role', builder: (_, __) => const RoleScreen()),
+      GoRoute(path: '/home', builder: (_, __) => const HomeShell()),
     ],
   );
 });
