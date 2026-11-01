@@ -1,31 +1,39 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'features/auth/auth_state.dart';
-import 'features/auth/login_screen.dart';
 import 'features/auth/role_screen.dart';
 import 'features/home/home_shell.dart';
+import 'features/crew/screens/crew_list_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final refresh = ValueNotifier<int>(0);
-  ref.listen(sessionProvider, (_, __) => refresh.value++);
-  ref.onDispose(refresh.dispose);
+  final authState = ref.watch(authStateProvider);
 
   return GoRouter(
-    initialLocation: '/home',
-    refreshListenable: refresh,
+    initialLocation: '/',
     redirect: (context, state) {
-      final s = ref.read(sessionProvider);
-      final loc = state.matchedLocation;
-      if (!s.loggedIn) return loc == '/login' ? null : '/login';
-      if (s.role == null) return loc == '/role' ? null : '/role';
-      if (loc == '/login' || loc == '/role') return '/home';
+      final isLoggedIn = authState != null;
+      final isLoggingIn = state.uri.path == '/auth';
+
+      if (!isLoggedIn && !isLoggingIn) return '/auth';
+      if (isLoggedIn && isLoggingIn) return '/';
       return null;
     },
     routes: [
-      GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
-      GoRoute(path: '/role', builder: (_, __) => const RoleScreen()),
-      GoRoute(path: '/home', builder: (_, __) => const HomeShell()),
+      GoRoute(
+        path: '/auth',
+        builder: (context, state) => const RoleScreen(),
+      ),
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const HomeShell(),
+        routes: [
+          GoRoute(
+            path: 'crew',
+            builder: (context, state) => const CrewListScreen(),
+          ),
+        ],
+      ),
     ],
   );
 });
