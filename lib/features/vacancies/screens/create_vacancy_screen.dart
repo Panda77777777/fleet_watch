@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/data/ranks.dart';
 import '../../../core/models/models.dart';
 import '../providers/vacancies_provider.dart';
@@ -58,12 +59,12 @@ class _CreateVacancyScreenState extends ConsumerState<CreateVacancyScreen> {
                     title: _titleController.text,
                     companyName: 'My Crewing Agency',
                     rank: _selectedRank,
-                    salary: _salaryController.text,
-                    vesselType: _vesselController.text,
+                    salary: _salaryController.text.isEmpty ? '\$5,000 / month' : _salaryController.text,
+                    vesselType: _vesselController.text.isEmpty ? 'General Cargo' : _vesselController.text,
                     contractDuration: '4 months',
                   );
-                  ref.read(vacanciesProvider.notifier).update((state) => [...state, newVacancy]);
-                  Navigator.pop(context);
+                  ref.read(vacanciesProvider.notifier).addVacancy(newVacancy);
+                  context.pop();
                 }
               },
               child: const Text('Publish Vacancy'),
