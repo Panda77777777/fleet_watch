@@ -6,6 +6,8 @@ import 'features/auth/role_screen.dart';
 import 'features/home/home_shell.dart';
 import 'features/vacancies/screens/vacancy_list_screen.dart';
 import 'features/vacancies/screens/create_vacancy_screen.dart';
+import 'features/vacancies/screens/applications_screen.dart';
+import 'features/profile/screens/documents_screen.dart';
 import 'features/crewing/screens/crewing_reviews_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -41,6 +43,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'create-vacancy',
             builder: (context, state) => const CreateVacancyScreen(),
+          ),
+          GoRoute(
+            path: 'documents',
+            builder: (context, state) => const DocumentsScreen(),
+          ),
+          GoRoute(
+            path: 'applications',
+            builder: (context, state) => const ApplicationsScreen(),
           ),
         ],
       ),

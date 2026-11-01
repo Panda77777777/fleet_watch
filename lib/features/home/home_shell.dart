@@ -42,7 +42,7 @@ class HomeShell extends ConsumerWidget {
                 'Role: ${isSeafarer ? 'Seafarer' : 'Crewing Agency'}',
                 style: const TextStyle(color: Colors.grey),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 24),
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(minimumSize: const Size.fromHeight(50)),
                 onPressed: () => context.go('/vacancies'),
@@ -50,6 +50,22 @@ class HomeShell extends ConsumerWidget {
                 label: const Text('Browse Vacancies Feed'),
               ),
               const SizedBox(height: 12),
+              if (isSeafarer) ...[
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(minimumSize: const Size.fromHeight(50)),
+                  onPressed: () => context.go('/documents'),
+                  icon: const Icon(Icons.folder_shared),
+                  label: const Text('My Maritime Documents'),
+                ),
+                const SizedBox(height: 12),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(minimumSize: const Size.fromHeight(50)),
+                  onPressed: () => context.go('/applications'),
+                  icon: const Icon(Icons.assignment_turned_in),
+                  label: const Text('My Applications'),
+                ),
+                const SizedBox(height: 12),
+              ],
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(minimumSize: const Size.fromHeight(50)),
                 onPressed: () => context.go('/reviews'),

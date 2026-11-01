@@ -1,5 +1,19 @@
 enum UserRole { seafarer, crewing }
 
+class SeafarerDocument {
+  final String id;
+  final String title;
+  final String expiryDate;
+  final bool isExpired;
+
+  const SeafarerDocument({
+    required this.id,
+    required this.title,
+    required this.expiryDate,
+    this.isExpired = false,
+  });
+}
+
 class UserProfile {
   final String id;
   final String email;
@@ -8,6 +22,7 @@ class UserProfile {
   final String? rank;
   final String? companyName;
   final double rating;
+  final List<SeafarerDocument> documents;
 
   const UserProfile({
     required this.id,
@@ -17,6 +32,7 @@ class UserProfile {
     this.rank,
     this.companyName,
     this.rating = 0.0,
+    this.documents = const [],
   });
 }
 
@@ -37,6 +53,22 @@ class Vacancy {
     required this.salary,
     required this.vesselType,
     required this.contractDuration,
+  });
+}
+
+class JobApplication {
+  final String id;
+  final String vacancyTitle;
+  final String companyName;
+  final String seafarerName;
+  final String status; // 'Applied', 'Under Review', 'Accepted'
+
+  const JobApplication({
+    required this.id,
+    required this.vacancyTitle,
+    required this.companyName,
+    required this.seafarerName,
+    required this.status,
   });
 }
 
