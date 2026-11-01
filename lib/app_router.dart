@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'features/auth/auth_state.dart';
 import 'features/auth/role_screen.dart';
 import 'features/home/home_shell.dart';
-import 'features/crew/screens/crew_list_screen.dart';
+import 'features/vacancies/screens/vacancy_list_screen.dart';
+import 'features/vacancies/screens/create_vacancy_screen.dart';
+import 'features/crewing/screens/crewing_reviews_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
@@ -29,8 +31,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const HomeShell(),
         routes: [
           GoRoute(
-            path: 'crew',
-            builder: (context, state) => const CrewListScreen(),
+            path: 'vacancies',
+            builder: (context, state) => const VacancyListScreen(),
+          ),
+          GoRoute(
+            path: 'reviews',
+            builder: (context, state) => const CrewingReviewsScreen(),
+          ),
+          GoRoute(
+            path: 'create-vacancy',
+            builder: (context, state) => const CreateVacancyScreen(),
           ),
         ],
       ),
